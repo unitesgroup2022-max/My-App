@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "1.0.0",
-  "description": "My Video App",
+  "description": "Video Downloader",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

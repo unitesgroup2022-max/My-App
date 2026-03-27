@@ -4,17 +4,29 @@
   <title>My Video App</title>
 </head>
 <body>
-  <h2>Video Downloader</h2>
 
-  <input type="text" id="url" placeholder="Paste video link here" style="width:300px;">
-  <br><br>
-  <button onclick="download()">Download</button>
+<h2>Video Downloader</h2>
 
-  <script>
-    function download() {
-      var link = document.getElementById("url").value;
-      alert("Downloading: " + link);
-    }
-  </script>
+<input type="text" id="url" placeholder="Paste video link" style="width:300px;">
+<br><br>
+<button onclick="download()">Download</button>
+
+<p id="result"></p>
+
+<script>
+function download() {
+  const url = document.getElementById("url").value;
+
+  fetch('/api?url=' + encodeURIComponent(url))
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("result").innerText = JSON.stringify(data);
+    })
+    .catch(err => {
+      document.getElementById("result").innerText = "Error";
+    });
+}
+</script>
+
 </body>
 </html>

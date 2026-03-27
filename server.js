@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     <head>
       <title>YouTube Downloader</title>
     </head>
-    <body style="text-align:center;font-family:sans-serif;">
+    <body style="text-align:center; font-family:sans-serif;">
       <h2>YouTube Downloader</h2>
 
       <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px;">
@@ -45,10 +45,7 @@ app.get('/api', async (req, res) => {
     res.header('Content-Disposition', 'attachment; filename="video.mp4"');
     res.header('Content-Type', 'video/mp4');
 
-    ytdl(url, {
-      filter: 'audioandvideo',
-      quality: 'highest'
-    }).pipe(res);
+    ytdl(url, { filter: 'audioandvideo' }).pipe(res);
 
   } catch (err) {
     console.log(err);
@@ -56,8 +53,8 @@ app.get('/api', async (req, res) => {
   }
 });
 
-// PORT
+// PORT (Render အတွက်အရေးကြီး)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Running on port " + PORT);
 });

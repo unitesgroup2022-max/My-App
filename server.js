@@ -1,5 +1,4 @@
 const express = require('express');
-const ytdl = require('ytdl-core');
 
 const app = express();
 
@@ -21,6 +20,10 @@ app.get('/', (req, res) => {
         <script>
           function go() {
             var url = document.getElementById('url').value;
+            if (!url) {
+              alert("Paste URL first!");
+              return;
+            }
             window.location = '/api?url=' + encodeURIComponent(url);
           }
         </script>
@@ -29,33 +32,21 @@ app.get('/', (req, res) => {
   `);
 });
 
-// API (SAFE VERSION)
-app.get('/api', async (req, res) => {
-  try {
-    const url = req.query.url;
+// API (simple + no error)
+app.get('/api', (req, res) => {
+  const url = req.query.url;
 
-    if (!url || !ytdl.validateURL(url)) {
-      return res.send("Invalid URL");
-    }
-
-    const info = await ytdl.getInfo(url);
-    const format = ytdl.chooseFormat(info.formats, { quality: 'highest' });
-
-    if (!format || !format.url) {
-      return res.send("No video format found");
-    }
-
-    res.redirect(format.url);
-
-  } catch (err) {
-    console.log(err);
-    res.send("Download error");
+  if (!url) {
+    return res.send("No URL");
   }
+
+  // 👉 YouTube ကို direct ဖွင့် (error မဖြစ်အောင်)
+  res.redirect(url);
 });
 
 // PORT
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-  console.log("Running on port " + PORT);
+  console.log("Server running on port " + PORT);
 });

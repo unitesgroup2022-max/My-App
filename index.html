@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Video App</title>
+  <title>Video Downloader</title>
 </head>
 <body>
 
 <h2>Video Downloader</h2>
 
-<input type="text" id="url" placeholder="Paste video link" style="width:300px;">
-<br><br>
+<input type="text" id="url" placeholder="Paste YouTube URL">
 <button onclick="download()">Download</button>
-
-<p id="result"></p>
 
 <script>
 function download() {
-  const url = document.getElementById("url").value;
+  const url = document.getElementById('url').value;
 
-  fetch('/api?url=' + encodeURIComponent(url))
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("result").innerText = JSON.stringify(data);
-    })
-    .catch(err => {
-      document.getElementById("result").innerText = "Error";
-    });
+  //  ဒီလို redirect လုပ်မှ download စမယ်
+  window.location.href = '/api?url=' + encodeURIComponent(url);
 }
 </script>
 

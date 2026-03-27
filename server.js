@@ -3,12 +3,41 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Home route
+// UI Page
 app.get("/", (req, res) => {
-  res.send(" Server is running");
+  res.send(`
+    <html>
+      <head>
+        <title>Video Downloader</title>
+        <style>
+          body { font-family: Arial; text-align: center; padding: 50px; }
+          input { width: 80%; padding: 10px; }
+          button { padding: 10px 20px; margin-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <h2>🎬 Video Downloader</h2>
+        <input type="text" id="url" placeholder="Paste video link هنا"><br>
+        <button onclick="download()">Download</button>
+
+        <p id="result"></p>
+
+        <script>
+          function download() {
+            const url = document.getElementById("url").value;
+            fetch('/download?url=' + encodeURIComponent(url))
+              .then(res => res.json())
+              .then(data => {
+                document.getElementById("result").innerText = data.message;
+              });
+          }
+        </script>
+      </body>
+    </html>
+  `);
 });
 
-// Download route (SIMULATION)
+// API
 app.get("/download", (req, res) => {
   const url = req.query.url;
 
@@ -19,7 +48,6 @@ app.get("/download", (req, res) => {
     });
   }
 
-  // Fake response (UI test only)
   res.json({
     status: "success",
     message: "Download simulated",
@@ -27,7 +55,6 @@ app.get("/download", (req, res) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(` Server running on port ${PORT}`);
+  console.log("🚀 Server running");
 });

@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My App</title>
+  <title>My Video App</title>
 </head>
-<body style="text-align:center; font-family:sans-serif;">
+<body>
+  <h2>Video Downloader</h2>
 
-  <h1> My App</h1>
-  <p>Welcome to my website</p>
+  <input type="text" id="url" placeholder="Paste video link here" style="width:300px;">
+  <br><br>
+  <button onclick="download()">Download</button>
 
-  <a href="#">
-    <button style="padding:10px 20px; font-size:16px;">
-      Download App
-    </button>
-  </a>
-
+  <script>
+    function download() {
+      var link = document.getElementById("url").value;
+      alert("Downloading: " + link);
+    }
+  </script>
 </body>
 </html>

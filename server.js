@@ -6,30 +6,30 @@ const app = express();
 // Home Page
 app.get('/', (req, res) => {
   res.send(`
-  <html>
-    <head>
-      <title>YouTube Downloader</title>
-    </head>
-    <body style="text-align:center; font-family:sans-serif;">
-      <h2>YouTube Downloader</h2>
+    <html>
+      <head>
+        <title>YouTube Downloader</title>
+      </head>
+      <body style="text-align:center;font-family:sans-serif">
+        <h2>YouTube Downloader</h2>
 
-      <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px;">
-      <br><br>
+        <input id="url" placeholder="Paste YouTube URL here" style="width:300px;padding:10px"/>
+        <br><br>
 
-      <button onclick="go()" style="padding:10px 20px;">Download</button>
+        <button onclick="go()" style="padding:10px 20px">Download</button>
 
-      <script>
-        function go() {
-          var url = document.getElementById('url').value;
-          if(!url){
-            alert("Put URL first");
-            return;
+        <script>
+          function go() {
+            var url = document.getElementById('url').value;
+            if(!url){
+              alert("Put URL first");
+              return;
+            }
+            window.location.href = '/api?url=' + encodeURIComponent(url);
           }
-          window.location.href = '/api?url=' + encodeURIComponent(url);
-        }
-      </script>
-    </body>
-  </html>
+        </script>
+      </body>
+    </html>
   `);
 });
 
@@ -53,8 +53,9 @@ app.get('/api', async (req, res) => {
   }
 });
 
-// PORT (Render အတွက်အရေးကြီး)
+// PORT (Render)
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log("Running on port " + PORT);
+  console.log("Server running on port " + PORT);
 });

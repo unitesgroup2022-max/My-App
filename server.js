@@ -1,17 +1,20 @@
 const express = require('express');
 const ytdl = require('ytdl-core');
+const path = require('path');
 
 const app = express();
 
+// Home page
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/api', async (req, res) => {
+// Download API
+app.get('/api', (req, res) => {
   const url = req.query.url;
 
-  if (!ytdl.validateURL(url)) {
-    return res.send("Invalid YouTube URL");
+  if (!url || !ytdl.validateURL(url)) {
+    return res.send("Invalid URL");
   }
 
   try {
@@ -23,10 +26,15 @@ app.get('/api', async (req, res) => {
       quality: 'highest'
     }).pipe(res);
 
-  } catch (err) {
-    res.send("Download failed");
+  } catch (e) {
+    console.log(e);
+    res.send("Error downloading");
   }
 });
 
+// IMPORTANT (မပျက်မကွက်လိုတယ်)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running"));
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});

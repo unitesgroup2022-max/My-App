@@ -1,25 +1,14 @@
 {
-  "name": "video-downloader-webapp",
+  "name": "video-downloader-api",
   "version": "1.0.0",
-  "description": "A simple full-stack video downloader web app using Node.js, Express, and yt-dlp-exec.",
+  "description": "Simple video downloader API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [
-    "video",
-    "downloader",
-    "express",
-    "nodejs",
-    "yt-dlp"
-  ],
-  "author": "Manus",
+  "author": "You",
   "license": "MIT",
-  "engines": {
-    "node": "18.x"
-  },
   "dependencies": {
-    "express": "^4.18.2",
-    "yt-dlp-exec": "^1.0.1"
+    "express": "^4.18.2"
   }
 }

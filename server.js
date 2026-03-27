@@ -1,41 +1,42 @@
-// update
-
 const express = require('express');
 const ytdl = require('ytdl-core');
-const path = require('path');
 
 const app = express();
 
-// Home page
+// Home (UI built-in)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.send(`
+    <html>
+      <head><title>Downloader</title></head>
+      <body style="text-align:center;font-family:sans-serif;">
+        <h2>YouTube Downloader</h2>
+        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px;">
+        <br><br>
+        <button onclick="go()" style="padding:10px 20px;">Download</button>
+
+        <script>
+          function go() {
+            var url = document.getElementById('url').value;
+            window.location = '/api?url=' + url;
+          }
+        </script>
+      </body>
+    </html>
+  `);
 });
 
-// API download
-app.get('/api', async (req, res) => {
+// API
+app.get('/api', (req, res) => {
   const url = req.query.url;
 
-  if (!url || !ytdl.validateURL(url)) {
-    return res.send("Invalid YouTube URL");
+  if (!ytdl.validateURL(url)) {
+    return res.send("Invalid URL");
   }
 
-  try {
-    res.header('Content-Disposition', 'attachment; filename="video.mp4"');
-    res.header('Content-Type', 'video/mp4');
-
-    ytdl(url, {
-      filter: 'audioandvideo',
-      quality: 'highest'
-    }).pipe(res);
-
-  } catch (err) {
-    console.error(err);
-    res.send("Download failed");
-  }
+  res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+  ytdl(url, { filter: 'audioandvideo' }).pipe(res);
 });
 
 // PORT
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
+app.listen(PORT, () => console.log("Running on " + PORT));

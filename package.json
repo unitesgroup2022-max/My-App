@@ -1,7 +1,7 @@
 {
   "name": "video-app",
   "version": "1.0.0",
-  "description": "Simple downloader",
+  "description": "YouTube Downloader",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

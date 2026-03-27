@@ -1,18 +1,21 @@
+// update
+
 const express = require('express');
 const ytdl = require('ytdl-core');
+const path = require('path');
 
 const app = express();
 
 // Home page
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // API download
 app.get('/api', async (req, res) => {
   const url = req.query.url;
 
-  if (!ytdl.validateURL(url)) {
+  if (!url || !ytdl.validateURL(url)) {
     return res.send("Invalid YouTube URL");
   }
 
@@ -26,11 +29,12 @@ app.get('/api', async (req, res) => {
     }).pipe(res);
 
   } catch (err) {
+    console.error(err);
     res.send("Download failed");
   }
 });
 
-//  အရေးကြီးဆုံး (PORT)
+// PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);

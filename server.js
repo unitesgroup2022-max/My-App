@@ -8,11 +8,11 @@ app.get('/', (req, res) => {
   res.send(`
     <html>
       <head><title>Downloader</title></head>
-      <body style="text-align:center;font-family:sans-serif;">
+      <body style="text-align:center;font-family:sans-serif">
         <h2>YouTube Downloader</h2>
-        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:8px;">
+        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px">
         <br><br>
-        <button onclick="go()" style="padding:10px 20px;">Download</button>
+        <button onclick="go()" style="padding:10px 20px">Download</button>
 
         <script>
           function go() {

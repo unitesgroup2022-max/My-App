@@ -1,41 +1,29 @@
 const express = require("express");
-const { exec } = require("child_process");
-const path = require("path");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public"));
+// Home Page
+app.get("/", (req, res) => {
+  res.send(`
+    <h2>🎬 Video Downloader</h2>
+    <form action="/download">
+      <input name="url" placeholder="Paste video link" style="width:300px"/>
+      <button type="submit">Download</button>
+    </form>
+  `);
+});
 
-// Download route
+// Download Route
 app.get("/download", (req, res) => {
   const url = req.query.url;
 
-  if (!url) {
-    return res.send("No URL provided");
-  }
-
-  const output = "video.mp4";
-
-  const command = `yt-dlp -o ${output} ${url}`;
-
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.log(error);
-      return res.send("Download failed");
-    }
-
-    res.download(output, () => {
-      console.log("Downloaded");
-    });
-  });
-});
-
-// Home route
-app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+  res.send(`
+    <h3>✅ Video Ready</h3>
+    <p>${url}</p>
+    <a href="${url}" target="_blank">▶ Open Video</a>
+  `);
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("🚀 Server running...");
 });

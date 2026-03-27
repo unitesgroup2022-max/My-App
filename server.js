@@ -3,21 +3,21 @@ const ytdl = require('ytdl-core');
 
 const app = express();
 
-// Home (UI built-in)
+// Home page
 app.get('/', (req, res) => {
   res.send(`
     <html>
       <head><title>Downloader</title></head>
       <body style="text-align:center;font-family:sans-serif;">
         <h2>YouTube Downloader</h2>
-        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px;">
+        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:8px;">
         <br><br>
         <button onclick="go()" style="padding:10px 20px;">Download</button>
 
         <script>
           function go() {
             var url = document.getElementById('url').value;
-            window.location = '/api?url=' + url;
+            window.location = '/api?url=' + encodeURIComponent(url);
           }
         </script>
       </body>
@@ -34,9 +34,13 @@ app.get('/api', (req, res) => {
   }
 
   res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+  res.header('Content-Type', 'video/mp4');
+
   ytdl(url, { filter: 'audioandvideo' }).pipe(res);
 });
 
 // PORT
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Running on " + PORT));
+app.listen(PORT, () => {
+  console.log("Running on port " + PORT);
+});

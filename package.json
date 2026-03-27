@@ -1,13 +1,13 @@
 {
-  "name": "my-app",
+  "name": "video-app",
   "version": "1.0.0",
-  "description": "Video Downloader",
+  "description": "Simple downloader",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "ytdl-core": "latest"
+    "ytdl-core": "^4.11.5"
   }
 }

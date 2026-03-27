@@ -1,21 +1,27 @@
 const express = require('express');
 const path = require('path');
-const youtubedl = require('yt-dlp-exec');
+const youtubedl = require('yt-dlp-exec').create({
+    binaryPath: require('yt-dlp-exec/bin').path
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
+// Test route (502 fix အတွက် အရေးကြီး)
+app.get('/', (req, res) => {
+    res.send(" Server is running...");
+});
 
 // API endpoint
 app.get('/api/download', async (req, res) => {
     const videoUrl = req.query.url;
 
-    //  URL validation (added)
-    if (!videoUrl || !videoUrl.startsWith('http')) {
-        return res.status(400).json({ error: 'Invalid URL' });
+    if (!videoUrl) {
+        return res.status(400).json({ error: 'Video URL is required' });
     }
 
     console.log(`[LOG] Download request: ${videoUrl}`);
@@ -26,7 +32,7 @@ app.get('/api/download', async (req, res) => {
 
         const subprocess = youtubedl.exec(videoUrl, {
             output: '-',
-            format: 'best', //  more stable
+            format: 'bestvideo+bestaudio/best'
         });
 
         subprocess.stdout.pipe(res);
@@ -36,35 +42,27 @@ app.get('/api/download', async (req, res) => {
         });
 
         subprocess.on('error', (err) => {
-            console.error('[ERROR] Subprocess:', err);
+            console.error('Error:', err);
             if (!res.headersSent) {
                 res.status(500).json({ error: 'Download failed' });
             }
         });
 
         subprocess.on('close', (code) => {
-            console.log(`[LOG] Process closed: ${code}`);
+            console.log(`Process closed with code ${code}`);
         });
 
         req.on('close', () => {
-            console.log('[LOG] Client disconnected');
             subprocess.kill();
         });
 
     } catch (err) {
-        console.error('[ERROR] Unexpected:', err);
-        if (!res.headersSent) {
-            res.status(500).json({ error: 'Server error' });
-        }
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
-//  Health check (Render test အတွက်)
-app.get('/', (req, res) => {
-    res.send("Server is running ");
-});
-
-// Start server (ONLY ONE)
+// Start server
 app.listen(PORT, () => {
-    console.log(`[LOG] Server running on port ${PORT}`);
+    console.log(` Server running on port ${PORT}`);
 });

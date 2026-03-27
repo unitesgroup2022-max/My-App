@@ -3,8 +3,7 @@ const ytdl = require('ytdl-core');
 
 const app = express();
 
-
-// ✅ Home Page
+// Home Page
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -30,25 +29,31 @@ app.get('/', (req, res) => {
   `);
 });
 
+// API (SAFE VERSION)
+app.get('/api', async (req, res) => {
+  try {
+    const url = req.query.url;
 
-// ✅ API (Download)
-app.get('/api', (req, res) => {
-  const url = req.query.url;
+    if (!url || !ytdl.validateURL(url)) {
+      return res.send("Invalid URL");
+    }
 
-  if (!ytdl.validateURL(url)) {
-    return res.send("Invalid URL");
+    const info = await ytdl.getInfo(url);
+    const format = ytdl.chooseFormat(info.formats, { quality: 'highest' });
+
+    if (!format || !format.url) {
+      return res.send("No video format found");
+    }
+
+    res.redirect(format.url);
+
+  } catch (err) {
+    console.log(err);
+    res.send("Download error");
   }
-
-  res.header('Content-Disposition', 'attachment; filename="video.mp4"');
-  res.header('Content-Type', 'video/mp4');
-
-  ytdl(url, {
-    quality: 'highest'
-  }).pipe(res);
 });
 
-
-// ✅ PORT (Render important)
+// PORT
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {

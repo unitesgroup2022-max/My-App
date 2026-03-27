@@ -6,11 +6,20 @@
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": ["video", "downloader", "express", "nodejs", "yt-dlp"],
+  "keywords": [
+    "video",
+    "downloader",
+    "express",
+    "nodejs",
+    "yt-dlp"
+  ],
   "author": "Manus",
   "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "express": "^4.18.2",
-    "yt-dlp-exec": "^2.4.0"
+    "yt-dlp-exec": "^1.0.1"
   }
 }

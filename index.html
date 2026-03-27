@@ -7,14 +7,12 @@
 
 <h2>Video Downloader</h2>
 
-<input type="text" id="url" placeholder="Paste YouTube URL">
+<input type="text" id="url" placeholder="Paste YouTube link">
 <button onclick="download()">Download</button>
 
 <script>
 function download() {
   const url = document.getElementById('url').value;
-
-  //  ဒီလို redirect လုပ်မှ download စမယ်
   window.location.href = '/api?url=' + encodeURIComponent(url);
 }
 </script>

@@ -3,13 +3,35 @@ const ytdl = require('ytdl-core');
 
 const app = express();
 
-//  1. Home page
+
+// ✅ Home Page
 app.get('/', (req, res) => {
-  res.send(`...html code...`);
+  res.send(`
+    <html>
+      <head>
+        <title>YouTube Downloader</title>
+      </head>
+      <body style="text-align:center;font-family:sans-serif;">
+        <h2>YouTube Downloader</h2>
+
+        <input id="url" placeholder="Paste YouTube URL" style="width:300px;padding:10px;">
+        <br><br>
+
+        <button onclick="go()" style="padding:10px 20px;">Download</button>
+
+        <script>
+          function go() {
+            var url = document.getElementById('url').value;
+            window.location = '/api?url=' + encodeURIComponent(url);
+          }
+        </script>
+      </body>
+    </html>
+  `);
 });
 
 
-//  2.  ဒီနေရာမှာထည့် (API)
+// ✅ API (Download)
 app.get('/api', (req, res) => {
   const url = req.query.url;
 
@@ -20,12 +42,15 @@ app.get('/api', (req, res) => {
   res.header('Content-Disposition', 'attachment; filename="video.mp4"');
   res.header('Content-Type', 'video/mp4');
 
-  ytdl(url, { filter: 'audioandvideo' }).pipe(res);
+  ytdl(url, {
+    quality: 'highest'
+  }).pipe(res);
 });
 
 
-//  3. PORT (အောက်ဆုံး)
+// ✅ PORT (Render important)
 const PORT = process.env.PORT || 10000;
+
 app.listen(PORT, () => {
   console.log("Running on port " + PORT);
 });
